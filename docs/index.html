@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snipio.js：支持截图、编辑和保存到本地功能，且可扩展</title>
+    <link rel="shortcut icon" href="./logo.png">
+    <!-- <script src="../dist/Snipio.js"></script> -->
+    <script src="https://unpkg.com/snipio.js"></script>
+</head>
+
+<body>
+
+    <script>
+
+        function doit(type) {
+            Snipio({
+                snipping: type,
+                tool: [{
+                    label: "确认",
+                    on: function () {
+                        console.log("你点击了确认按钮！");
+                    }
+                }]
+            });
+        }
+
+    </script>
+
+    <style>
+        body {
+            background-color: white;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        button {
+            width: 180px;
+            height: 35px;
+            cursor: pointer;
+        }
+    </style>
+
+    <h2>
+        <div style="background-image: url('./logo.png');width:200px;height: 200px;"></div>
+        <hr />
+        <a href="https://github.com/zxl20070701/Snipio.js" target="_blank">
+            Snipio.js - 截图编辑工具（测试页面）
+        </a>
+    </h2>
+    <p>
+        支持截图、编辑和保存到本地功能
+    </p>
+    <button onclick="doit('h5')">
+        截图(h5)+编辑+下载
+    </button>
+
+    <button onclick="doit('system')">
+        截图(system)+编辑+下载
+    </button>
+
+    <button onclick="doit('none')">
+        截图(none)+编辑+下载
+    </button>
+</body>
+
+</html>
