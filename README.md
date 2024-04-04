@@ -61,7 +61,7 @@ Snipio({
 Snipio({
     tool: [{
         label: "确认",
-        on: function () {
+        callback: function () {
             console.log("你点击了确认按钮！");
         }
     }]
@@ -76,9 +76,9 @@ Snipio({
 Snipio({
     tool: [{
         label: "画笔",
-        on: function () {
+        callback: function () {
             return {
-                bind:{
+                on:{
                     mouseDown:function(event){},
                     mouseMove:function(event){},
                     mouseUp:function(event){}
@@ -97,14 +97,14 @@ Snipio({
 ```js
 this = {
     // 截图
-    base64:string,
+    base64:String,
 
     // 画布节点
     view: Element,
 
     // 画布尺寸
-    width: number,
-    height: number,
+    width: Number,
+    height: Number,
 
     // 画笔
     painter,
@@ -113,7 +113,10 @@ this = {
     history: Array,
 
     // 关闭
-    close: function
+    close: Function,
+
+    // 获取当前画布base64
+    toDataURL: Function
 }
 ```
 

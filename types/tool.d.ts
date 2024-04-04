@@ -10,7 +10,7 @@ interface onFun {
          * 
          * （只有hold=true此配置有效）
          */
-        bind?: {
+        on?: {
 
             /**
              * 鼠标按下
@@ -40,7 +40,7 @@ export default interface ToolType {
     /**
      * 当前工具实例方法
      */
-    on: onFun
+    callback: onFun
 
     /**
      * 点击是否需要持久点中状态

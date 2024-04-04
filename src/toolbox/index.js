@@ -1,9 +1,10 @@
 import drawLine from "./drawLine";
+import drawMosaic from "./drawMosaic";
 
 export default [
     {
         label: "撤销",
-        on: function () {
+        callback: function () {
             if (this.history.length > 0) {
                 this.history.pop();
                 this.painter.clearRect(0, 0, this.width, this.height);
@@ -26,7 +27,9 @@ export default [
 
                         // 马赛克
                         else if (_this.history[i].type == "mosaic") {
-
+                            for (var j = 0; j < _this.history[i].value.length; j++) {
+                                _this.painter.clearRect(_this.history[i].value[j].x - 5, _this.history[i].value[j].y - 5, 10, 10);
+                            }
                         }
                     }
                 };
@@ -36,6 +39,9 @@ export default [
                         updateView();
                     });
                 } else {
+                    this.painter.config({
+                        fillStyle: "white"
+                    }).fillRect(0, 0, this.width, this.height);
                     updateView();
                 }
 
@@ -46,9 +52,9 @@ export default [
     },
     {
         label: "保存",
-        on: function () {
+        callback: function () {
             var btn = document.createElement('a');
-            this.painter.toDataURL().then(function (base64) {
+            this.toDataURL().then(function (base64) {
                 btn.href = base64;
                 btn.download = "截图.png";
                 btn.click();
@@ -57,21 +63,21 @@ export default [
     },
     {
         label: "马赛克",
-        on: function () {
-
+        callback: function () {
+            return drawMosaic();
         },
         hold: true
     },
     {
         label: "画笔",
-        on: function () {
+        callback: function () {
             return drawLine();
         },
         hold: true
     },
     {
         label: "取消",
-        on: function () {
+        callback: function () {
             this.close();
         }
     }

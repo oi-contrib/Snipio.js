@@ -15,6 +15,7 @@ export default function (options) {
         });
     }
 
+    // 系统截图方式
     else if (options.snipping == "system") {
         snipping("system", function (base64, width, height) {
             edit(base64, width, height, tool);
