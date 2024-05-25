@@ -11,7 +11,7 @@ module.exports = {
         format: "umd",
         banner: `/*!
  * Snipio.js v${pkg.version}
- * git+https://github.com/zxl20070701/Snipio.js.git
+ * git+https://github.com/oi-contrib/Snipio.js.git
  *
  * Copyright zxl20070701
  * Released under the MIT license

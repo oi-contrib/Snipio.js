@@ -1,4 +1,4 @@
-import Canvas from "vislite/lib/Canvas/index.umd";
+import Canvas from "vislite/lib/Canvas/index.es";
 
 export var createMosaic = function (width, height) {
     var viewEl = document.createElement("div");

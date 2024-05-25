@@ -11,27 +11,7 @@ export default [
 
                 var _this = this;
                 var updateView = function () {
-                    for (var i = 0; i < _this.history.length; i++) {
-
-                        // 线条
-                        if (_this.history[i].type == "line") {
-                            _this.painter.config({
-                                strokeStyle: "red",
-                                lineWidth: 2
-                            }).beginPath().moveTo(_this.history[i].value[0].x, _this.history[i].value[0].y);
-
-                            for (var j = 1; j < _this.history[i].value.length; j++) {
-                                _this.painter.lineTo(_this.history[i].value[j].x, _this.history[i].value[j].y).stroke();
-                            }
-                        }
-
-                        // 马赛克
-                        else if (_this.history[i].type == "mosaic") {
-                            for (var j = 0; j < _this.history[i].value.length; j++) {
-                                _this.painter.clearRect(_this.history[i].value[j].x - 5, _this.history[i].value[j].y - 5, 10, 10);
-                            }
-                        }
-                    }
+                    _this.drawHistroy.call(_this);
                 };
 
                 if (this.base64) {
@@ -63,6 +43,13 @@ export default [
     },
     {
         label: "马赛克",
+        drawHistroy: {
+            mosaic: function (value) {
+                for (var j = 0; j < value.length; j++) {
+                    this.painter.clearRect(value[j].x - 5, value[j].y - 5, 10, 10);
+                }
+            }
+        },
         callback: function () {
             return drawMosaic();
         },
@@ -70,6 +57,19 @@ export default [
     },
     {
         label: "画笔",
+        drawHistroy: {
+            line: function (value) {
+                this.painter.config({
+                    strokeStyle: "red",
+                    lineWidth: 2
+                }).beginPath().moveTo(value[0].x, value[0].y);
+
+                for (var j = 1; j < value.length; j++) {
+                    this.painter.lineTo(value[j].x, value[j].y).stroke();
+                }
+
+            }
+        },
         callback: function () {
             return drawLine();
         },

@@ -10,10 +10,12 @@
     <a href="https://www.npmjs.com/package/snipio.js">
         <img src="https://img.shields.io/npm/v/snipio.js.svg" alt="Version">
     </a>
-    <a href="https://github.com/zxl20070701/Snipio.js" target='_blank'>
-        <img alt="GitHub repo stars" src="https://img.shields.io/github/stars/zxl20070701/Snipio.js?style=social">
+    <a href="https://github.com/oi-contrib/Snipio.js" target='_blank'>
+        <img alt="GitHub repo stars" src="https://img.shields.io/github/stars/oi-contrib/Snipio.js?style=social">
     </a>
 </p>
+
+<img src="https://nodei.co/npm/snipio.js.png?downloads=true&amp;downloadRank=true&amp;stars=true" alt="NPM">
 
 ## 如何使用？
 
@@ -53,6 +55,19 @@ Snipio({
 })
 ```
 
+### 使用html2canvas截图
+
+> 0.2.0 新增
+
+截取屏幕你也可以选择使用`html2canvas`，只需要：
+
+```js
+Snipio({
+    snipping: "html2canvas",
+    html2canvas
+});
+```
+
 ### 扩展工具箱
 
 你可以通过下面方式，扩展工具按钮：
@@ -70,12 +85,18 @@ Snipio({
 
 上面我们就给工具箱添加了一个确定按钮。
 
-如果你希望添加的按钮希望进行更复制的业务处理，比如类似“画笔”或“马赛克”，你可以这样：
+如果你希望添加的按钮进行更复杂的业务处理，比如类似“画笔”或“马赛克”，你可以这样：
 
 ```js
 Snipio({
     tool: [{
-        label: "画笔",
+        label: "马赛克",
+
+        // v0.2.0 新增
+        drawHistroy:{
+            mosaic:function(history){}
+        },
+
         callback: function () {
             return {
                 on:{
@@ -90,9 +111,11 @@ Snipio({
 })
 ```
 
-其中bind的事件会主动触发。
+其中on的事件会主动触发。
 
-此外，包括on等在内的所有配置都可选，且其中的this均一致，格式如下：
+> 具体代码你可以查看：[./src/toolbox/index.js](./src/toolbox/index.js)
+
+此外，包括on及其下面的mouseDown等在内的所有配置都可选，且其中的this均一致，格式如下：
 
 ```js
 this = {
@@ -109,8 +132,11 @@ this = {
     // 画笔
     painter,
 
-    // 记录历史记录
+    // 历史记录
     history: Array,
+
+    // 绘制历史记录，v0.2.0 新增
+    drawHistroy: Function,
 
     // 关闭
     close: Function,

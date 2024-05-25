@@ -1,34 +1,17 @@
-import getStyle from '../xhtml/getStyle';
+import getStyleTemplate from "./getStyleTemplate";
 
 var imgUrlWill = {};
+
 var elToTemplate = function (el) {
     var tagName = el.tagName.toLowerCase();
 
-    var styleTemplate = "";
-    var elStyles = getStyle(el);
-
-    for (var index = 0; index < elStyles.length; index++) {
-        var keyName = elStyles[index];
-        var keyValue = elStyles[keyName];
-
-        // 背景图片
-        if (/^background\-image/.test(keyName)) {
-            if (/^url\(\".+\"\)$/.test(keyValue)) {
-                var imgUrl = keyValue.replace(/^url\(\"/, "").replace(/\"\)$/, "");
-                keyValue = encodeURIComponent("@@@@" + imgUrl + "@@@@");
-                imgUrlWill[keyValue] = imgUrl;
-            }
-        }
-
-        styleTemplate += keyName + ":" + keyValue + ";";
-    }
-
+    var styleTemplate = getStyleTemplate(el, imgUrlWill);
     var template = "<" + tagName + " style='" + styleTemplate + "'>";
 
     for (var index = 0; index < el.childNodes.length; index++) {
 
         // 排除掉一些特殊的标签和截图工具本身
-        if (["SCRIPT", "#comment","STYLE"].indexOf(el.childNodes[index].nodeName) > -1 || (el.childNodes[index].getAttribute && el.childNodes[index].getAttribute('page-view') == 'snipping-tool')) {
+        if (["SCRIPT", "#comment", "STYLE", "NOSCRIPT"].indexOf(el.childNodes[index].nodeName) > -1 || (el.childNodes[index].getAttribute && el.childNodes[index].getAttribute('page-view') == 'snipping-tool')) {
             continue;
         }
 
@@ -39,7 +22,20 @@ var elToTemplate = function (el) {
 
         // 节点
         else if (el.childNodes[index].nodeType == '1') {
-            template += elToTemplate(el.childNodes[index]);
+
+            // 图片
+            if (el.childNodes[index].nodeName == 'IMG') {
+
+                var imgUrl = el.childNodes[index].getAttribute("src");
+                var keyValue = encodeURIComponent("@@@@" + imgUrl + "@@@@");
+                imgUrlWill[keyValue] = imgUrl;
+
+                var styleTemplate = getStyleTemplate(el.childNodes[index], imgUrlWill);
+                template += "<img src='" + keyValue + "' style='" + styleTemplate + "'/>";
+
+            } else {
+                template += elToTemplate(el.childNodes[index]);
+            }
         }
 
     }
@@ -70,7 +66,7 @@ export default function (el) {
 
                         var base64 = canvas.toDataURL();
                         while (template.match(key)) {
-                            template = template.replace(key, "url(" + base64 + ")");
+                            template = template.replace(key, base64);
                         }
 
                         resolve();

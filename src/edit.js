@@ -1,4 +1,4 @@
-import Canvas from "vislite/lib/Canvas/index.umd";
+import Canvas from "vislite/lib/Canvas/index.es";
 import setStyle from "./core/xhtml/setStyle";
 import { createMosaic } from "./core/tool/mosaic";
 
@@ -23,7 +23,7 @@ export default function (base64, width, height, tool) {
     editEl.appendChild(viewEl);
 
     setStyle(viewEl, {
-        position: "absolute",
+        position: "fixed",
         left: "calc(50vw - " + width * 0.5 + "px)",
         top: "calc(50vh - " + height * 0.5 + "px)",
         width: width + "px",
@@ -48,7 +48,7 @@ export default function (base64, width, height, tool) {
     toolboxEl.setAttribute("snipio", "toolbox");
 
     setStyle(toolboxEl, {
-        position: "absolute",
+        position: "fixed",
         right: "calc(50vw - " + width * 0.5 + "px)",
         bottom: "calc(50vh - " + (height * 0.5 + 30) + "px)",
         height: "30px",
@@ -63,8 +63,26 @@ export default function (base64, width, height, tool) {
         backgroundSize: "100% auto"
     });
 
+    var drawHistroy = {};
+    for (var k = 0; k < tool.length; k++) {
+        if (tool[k].drawHistroy) {
+            for (var key in tool[k].drawHistroy) {
+                drawHistroy[key] = tool[k].drawHistroy[key];
+            }
+        }
+    }
+
     // 为工具箱提供的实例对象
     var instance = {
+
+        // 绘制历史记录
+        drawHistroy: function () {
+            for (var i = 0; i < this.history.length; i++) {
+                if (drawHistroy[this.history[i].type]) {
+                    drawHistroy[this.history[i].type].call(this, this.history[i].value);
+                } else { }
+            }
+        },
 
         // 获取当前画布base64
         toDataURL: function () {
@@ -94,7 +112,7 @@ export default function (base64, width, height, tool) {
         // 画笔
         painter: painter,
 
-        // 记录历史记录
+        // 历史记录
         history: [],
 
         // 关闭

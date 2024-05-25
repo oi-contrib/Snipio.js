@@ -15,6 +15,13 @@ export default function (options) {
         });
     }
 
+    // html2canvas截图方式
+    else if (options.snipping == "html2canvas") {
+        snipping("html2canvas", function (base64, width, height) {
+            edit(base64, width, height, tool);
+        }, options.html2canvas);
+    }
+
     // 系统截图方式
     else if (options.snipping == "system") {
         snipping("system", function (base64, width, height) {

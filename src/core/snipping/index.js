@@ -22,8 +22,12 @@ export default function (_left, _top, _width, _height, el) {
 
                 var painter = canvas.getContext('2d');
 
-                // 绘制
-                painter.drawImage(img, _left, _top, _width, _height, 0, 0, _width, _height);
+                // 绘制底色
+                painter.fillStyle = "white";
+                painter.fillRect(0, 0, _width, _height);
+
+                // 绘制截图
+                painter.drawImage(img, _left + document.scrollingElement.scrollLeft, _top + document.scrollingElement.scrollTop, _width, _height, 0, 0, _width, _height);
 
                 resolve(canvas.toDataURL());
             }, 100);
